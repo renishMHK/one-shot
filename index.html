@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OneShot — Autonomous Feature Delivery Pipeline</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#adc6ff",
+        "on-primary": "#253f70",
+        "primary-container": "#395283",
+        secondary: "#4edea3",
+        "secondary-container": "#00452d",
+        tertiary: "#ffcb8e",
+        "tertiary-container": "#ffb95f",
+        "on-tertiary-container": "#5c3800",
+        error: "#fa746f",
+        surface: "#0f0e10",
+        "surface-container": "#1a191c",
+        "surface-container-high": "#201f22",
+        "surface-container-highest": "#272529",
+        "on-surface": "#e9e4e9",
+        "on-surface-variant": "#aeaaaf",
+        outline: "#777479",
+        "outline-variant": "#49474b",
+      },
+      fontFamily: {
+        headline: ["Space Grotesk"],
+        body: ["Inter"],
+      },
+    },
+  },
+}
+</script>
+<style>
+  body { font-family: 'Inter', sans-serif; background-color: #09090B; color: #e9e4e9; }
+  .font-headline { font-family: 'Space Grotesk', sans-serif; }
+  .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+  .glow-blue { box-shadow: 0 0 20px rgba(173, 198, 255, 0.1); }
+
+  @keyframes ring-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes logo-orbit {
+    0%   { transform: rotate(0deg) scale(1);    filter: drop-shadow(0 0 6px rgba(173,198,255,0.5)); }
+    25%  { transform: rotate(8deg) scale(1.08);  filter: drop-shadow(0 0 14px rgba(78,222,163,0.6)); }
+    50%  { transform: rotate(0deg) scale(1);    filter: drop-shadow(0 0 10px rgba(173,198,255,0.4)); }
+    75%  { transform: rotate(-8deg) scale(1.08); filter: drop-shadow(0 0 14px rgba(255,185,95,0.5)); }
+    100% { transform: rotate(0deg) scale(1);    filter: drop-shadow(0 0 6px rgba(173,198,255,0.5)); }
+  }
+
+  .pipeline-connector { position: relative; display: flex; align-items: center; }
+  .pipeline-connector::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(173,198,255,0.2), rgba(78,222,163,0.2));
+    z-index: 0;
+  }
+</style>
+</head>
+<body class="bg-[#09090B]">
+<main class="pb-20 max-w-7xl mx-auto px-6">
+
+  <!-- ── HERO ─────────────────────────────────────────────────── -->
+  <section class="pt-20 pb-16 flex flex-col items-center text-center">
+    <!-- Animated bolt icon -->
+    <div class="relative w-20 h-20 mb-8">
+      <div class="absolute inset-[-4px] rounded-full border-2 border-primary/20" style="animation: ring-spin 6s linear infinite reverse;"></div>
+      <div class="absolute inset-0 rounded-full border-[2.5px] border-transparent" style="border-top-color: #adc6ff; border-right-color: #4edea3; border-bottom-color: rgba(173,198,255,0.15); animation: ring-spin 2.5s linear infinite; filter: drop-shadow(0 0 4px rgba(173,198,255,0.4));"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span class="material-symbols-outlined text-primary text-4xl" style="animation: logo-orbit 4s ease-in-out infinite; font-variation-settings: 'FILL' 1;">bolt</span>
+      </div>
+    </div>
+
+    <h1 class="font-headline text-5xl md:text-6xl font-bold tracking-tight text-white mb-4">OneShot</h1>
+    <p class="font-headline text-xs uppercase tracking-[0.2em] text-[#4edea3] mb-6">Autonomous Feature Delivery Pipeline</p>
+    <p class="text-on-surface-variant text-lg leading-relaxed max-w-2xl">
+      Transforms JIRA tickets into draft pull requests through a fully autonomous 7-stage AI pipeline.
+      No human intervention required between ticket creation and PR delivery.
+    </p>
+
+    <!-- Stats bar -->
+    <div class="grid grid-cols-2 gap-4 mt-12 w-full max-w-md">
+      <div class="glass-card rounded-2xl p-6 text-center">
+        <div class="font-headline text-3xl font-bold text-primary">7</div>
+        <div class="text-on-surface-variant text-xs uppercase tracking-widest mt-1">Pipeline Stages</div>
+      </div>
+      <div class="glass-card rounded-2xl p-6 text-center">
+        <div class="font-headline text-3xl font-bold text-[#4edea3]">6</div>
+        <div class="text-on-surface-variant text-xs uppercase tracking-widest mt-1">Specialized Agents</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PIPELINE STAGES ──────────────────────────────────────── -->
+  <section class="mb-28">
+    <div class="flex items-center gap-4 mb-12">
+      <div class="w-1.5 h-10 bg-primary rounded-full"></div>
+      <h2 class="text-3xl md:text-4xl font-headline font-bold tracking-tight">The Pipeline</h2>
+    </div>
+    <div class="flex flex-wrap justify-center items-start gap-3 md:gap-2">
+      <!-- Qualify -->
+      <div class="flex flex-col items-center w-28 md:w-32 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-primary text-2xl">verified</span>
+        </div>
+        <div class="font-headline font-bold text-sm text-white mb-1">Qualify</div>
+        <div class="text-on-surface-variant text-[11px] leading-tight">Evaluates ticket scope and feasibility</div>
+      </div>
+      <span class="material-symbols-outlined text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <!-- Plan -->
+      <div class="flex flex-col items-center w-28 md:w-32 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-primary text-2xl">architecture</span>
+        </div>
+        <div class="font-headline font-bold text-sm text-white mb-1">Plan</div>
+        <div class="text-on-surface-variant text-[11px] leading-tight">Generates implementation plan from context</div>
+      </div>
+      <span class="material-symbols-outlined text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <!-- Review -->
+      <div class="flex flex-col items-center w-28 md:w-32 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-[#ffb95f]/10 flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-[#ffb95f] text-2xl">rate_review</span>
+        </div>
+        <div class="font-headline font-bold text-sm text-white mb-1">Review</div>
+        <div class="text-on-surface-variant text-[11px] leading-tight">Cross-model review validates plan quality</div>
+      </div>
+      <span class="material-symbols-outlined text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <!-- Implement -->
+      <div class="flex flex-col items-center w-28 md:w-32 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-[#4edea3]/10 flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-[#4edea3] text-2xl">code</span>
+        </div>
+        <div class="font-headline font-bold text-sm text-white mb-1">Implement</div>
+        <div class="text-on-surface-variant text-[11px] leading-tight">Writes production code on a dedicated branch</div>
+      </div>
+      <span class="material-symbols-outlined text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <!-- Code Review -->
+      <div class="flex flex-col items-center w-28 md:w-32 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-[#ffb95f]/10 flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-[#ffb95f] text-2xl">policy</span>
+        </div>
+        <div class="font-headline font-bold text-sm text-white mb-1">Code Review</div>
+        <div class="text-on-surface-variant text-[11px] leading-tight">Reviews code for bugs and standards</div>
+      </div>
+      <span class="material-symbols-outlined text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <!-- Test -->
+      <div class="flex flex-col items-center w-28 md:w-32 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-[#4edea3]/10 flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-[#4edea3] text-2xl">science</span>
+        </div>
+        <div class="font-headline font-bold text-sm text-white mb-1">Test</div>
+        <div class="text-on-surface-variant text-[11px] leading-tight">Runs automated test suites</div>
+      </div>
+      <span class="material-symbols-outlined text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <!-- PR -->
+      <div class="flex flex-col items-center w-28 md:w-32 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-[#4edea3]/10 flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-[#4edea3] text-2xl">merge_type</span>
+        </div>
+        <div class="font-headline font-bold text-sm text-white mb-1">PR</div>
+        <div class="text-on-surface-variant text-[11px] leading-tight">Opens draft PR, posts results to JIRA</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ─────────────────────────────────────────── -->
+  <section class="mb-28">
+    <div class="flex items-center gap-4 mb-12">
+      <div class="w-1.5 h-10 bg-primary rounded-full"></div>
+      <h2 class="text-3xl md:text-4xl font-headline font-bold tracking-tight">How It Works</h2>
+    </div>
+    <div class="relative space-y-8">
+      <div class="absolute left-6 top-8 bottom-8 w-px bg-white/10 hidden md:block"></div>
+      <!-- Step 1 -->
+      <div class="relative flex flex-col md:flex-row gap-6 items-start">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline font-bold text-xl z-10">1</div>
+        <div class="glass-card p-8 rounded-2xl w-full">
+          <h3 class="text-xl font-headline font-bold mb-2 text-primary">Ticket Enters</h3>
+          <p class="text-on-surface-variant leading-relaxed">A JIRA ticket labeled <code class="bg-white/5 px-2 py-0.5 rounded text-[#4edea3]">PFOS</code> is detected by the Specter orchestrator during its polling cycle and routed into the OneShot pipeline.</p>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="relative flex flex-col md:flex-row gap-6 items-start">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline font-bold text-xl z-10">2</div>
+        <div class="glass-card p-8 rounded-2xl w-full">
+          <h3 class="text-xl font-headline font-bold mb-2 text-primary">Qualification Gate</h3>
+          <p class="text-on-surface-variant leading-relaxed">The <span class="text-white font-semibold">QUALIFIER</span> agent evaluates scope, feasibility, and repository context. Ambiguous or unbounded tickets are rejected with detailed feedback posted back to JIRA.</p>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="relative flex flex-col md:flex-row gap-6 items-start">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline font-bold text-xl z-10">3</div>
+        <div class="glass-card p-8 rounded-2xl w-full">
+          <h3 class="text-xl font-headline font-bold mb-2 text-primary">Autonomous Pipeline</h3>
+          <div class="flex flex-wrap gap-3 my-4">
+            <span class="text-xs uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full">Plan</span>
+            <span class="material-symbols-outlined text-sm opacity-30">arrow_forward</span>
+            <span class="text-xs uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full">Review</span>
+            <span class="material-symbols-outlined text-sm opacity-30">arrow_forward</span>
+            <span class="text-xs uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full">Implement</span>
+            <span class="material-symbols-outlined text-sm opacity-30">arrow_forward</span>
+            <span class="text-xs uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full">Code Review</span>
+            <span class="material-symbols-outlined text-sm opacity-30">arrow_forward</span>
+            <span class="text-xs uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full">Test</span>
+          </div>
+          <p class="text-on-surface-variant leading-relaxed">Each stage is powered by a specialized AI agent. Review loops are bounded to a maximum of <span class="text-white font-semibold">3 iterations</span> to prevent infinite correction cycles and ensure predictable completion.</p>
+        </div>
+      </div>
+      <!-- Step 4 -->
+      <div class="relative flex flex-col md:flex-row gap-6 items-start">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline font-bold text-xl z-10">4</div>
+        <div class="glass-card p-8 rounded-2xl w-full">
+          <h3 class="text-xl font-headline font-bold mb-2 text-primary">Human Review</h3>
+          <p class="text-on-surface-variant leading-relaxed">A draft pull request is delivered to GitHub. The pipeline summary, PR link, and completion status are posted back to the original JIRA ticket. A human reviewer takes it from here — <span class="text-white font-semibold">OneShot never merges code automatically</span>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── AGENT ROSTER ─────────────────────────────────────────── -->
+  <section class="mb-28">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-1.5 h-10 bg-primary rounded-full"></div>
+      <h2 class="text-3xl md:text-4xl font-headline font-bold tracking-tight">The Agent Roster</h2>
+    </div>
+    <p class="text-on-surface-variant mb-10 ml-6 max-w-2xl">Six specialized agents, two model families. Using both Claude and GPT-5.4 provides vendor diversity — reducing the risk of shared blind spots between the agent that writes code and the one that reviews it.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- QUALIFIER -->
+      <div class="bg-[#1c1b1d] border border-white/5 p-6 rounded-2xl hover:bg-[#222124] transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <h4 class="font-headline font-bold tracking-tight text-xl text-white">QUALIFIER</h4>
+          <span class="bg-primary/15 text-primary text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">Claude</span>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Evaluates ticket scope and feasibility before pipeline entry. Inspects the repository to verify implementation details are discoverable.</p>
+      </div>
+      <!-- PLANNER -->
+      <div class="bg-[#1c1b1d] border border-white/5 p-6 rounded-2xl hover:bg-[#222124] transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <h4 class="font-headline font-bold tracking-tight text-xl text-white">PLANNER</h4>
+          <span class="bg-primary/15 text-primary text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">Claude</span>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Generates step-by-step implementation plans from ticket context. Maps acceptance criteria to implementation steps with TDD awareness.</p>
+      </div>
+      <!-- REVIEWER -->
+      <div class="bg-[#1c1b1d] border border-white/5 p-6 rounded-2xl hover:bg-[#222124] transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <h4 class="font-headline font-bold tracking-tight text-xl text-white">REVIEWER</h4>
+          <span class="bg-[#ffb95f]/15 text-[#ffb95f] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">GPT-5.4</span>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Cross-model review for plan quality, correctness, and completeness. Issues verdicts: Approved, Needs Changes, or Blocked.</p>
+      </div>
+      <!-- IMPLEMENTER -->
+      <div class="bg-[#1c1b1d] border border-white/5 p-6 rounded-2xl hover:bg-[#222124] transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <h4 class="font-headline font-bold tracking-tight text-xl text-white">IMPLEMENTER</h4>
+          <span class="bg-[#4edea3]/15 text-[#4edea3] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">Claude</span>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Writes production code on dedicated branches following approved plans. Handles git operations, commits, and branch management.</p>
+      </div>
+      <!-- CODE REVIEWER -->
+      <div class="bg-[#1c1b1d] border border-white/5 p-6 rounded-2xl hover:bg-[#222124] transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <h4 class="font-headline font-bold tracking-tight text-xl text-white">CODE REVIEWER</h4>
+          <span class="bg-[#ffb95f]/15 text-[#ffb95f] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">GPT-5.4</span>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Reviews generated code for bugs, standards violations, security issues, and regression risks. Can flag issues for revision.</p>
+      </div>
+      <!-- TESTER -->
+      <div class="bg-[#1c1b1d] border border-white/5 p-6 rounded-2xl hover:bg-[#222124] transition-all">
+        <div class="flex justify-between items-start mb-4">
+          <h4 class="font-headline font-bold tracking-tight text-xl text-white">TESTER</h4>
+          <span class="bg-[#4edea3]/15 text-[#4edea3] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">Deterministic</span>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Executes automated test suites deterministically (no LLM). Parses test reports, captures coverage metrics, and creates the draft PR.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── KEY CAPABILITIES ─────────────────────────────────────── -->
+  <section class="mb-20">
+    <div class="flex items-center gap-4 mb-12">
+      <div class="w-1.5 h-10 bg-primary rounded-full"></div>
+      <h2 class="text-3xl md:text-4xl font-headline font-bold tracking-tight">Key Capabilities</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <!-- Bounded Review Loops -->
+      <div class="glass-card p-8 rounded-2xl flex gap-6 items-start hover:shadow-[0_0_30px_rgba(173,198,255,0.06)] transition-all">
+        <div class="bg-primary/10 p-3 rounded-xl flex-shrink-0">
+          <span class="material-symbols-outlined text-primary text-3xl">repeat</span>
+        </div>
+        <div>
+          <h4 class="font-headline font-bold text-lg mb-2 text-white">Bounded Review Loops</h4>
+          <p class="text-on-surface-variant text-sm leading-relaxed">Maximum 3 review iterations per pipeline stage. Prevents infinite correction cycles and ensures predictable completion times.</p>
+        </div>
+      </div>
+      <!-- Token Budgets -->
+      <div class="glass-card p-8 rounded-2xl flex gap-6 items-start hover:shadow-[0_0_30px_rgba(173,198,255,0.06)] transition-all">
+        <div class="bg-primary/10 p-3 rounded-xl flex-shrink-0">
+          <span class="material-symbols-outlined text-primary text-3xl">payments</span>
+        </div>
+        <div>
+          <h4 class="font-headline font-bold text-lg mb-2 text-white">Token Budgets</h4>
+          <p class="text-on-surface-variant text-sm leading-relaxed">2 million token ceiling per run. Cumulative usage tracked across all agents to prevent runaway costs.</p>
+        </div>
+      </div>
+      <!-- Branch Safety -->
+      <div class="glass-card p-8 rounded-2xl flex gap-6 items-start hover:shadow-[0_0_30px_rgba(173,198,255,0.06)] transition-all">
+        <div class="bg-primary/10 p-3 rounded-xl flex-shrink-0">
+          <span class="material-symbols-outlined text-primary text-3xl">security</span>
+        </div>
+        <div>
+          <h4 class="font-headline font-bold text-lg mb-2 text-white">Branch Safety</h4>
+          <p class="text-on-surface-variant text-sm leading-relaxed">Base commit tracking and drift detection. Automatically halts on branch divergence to protect repository integrity.</p>
+        </div>
+      </div>
+      <!-- Versioned Artifacts -->
+      <div class="glass-card p-8 rounded-2xl flex gap-6 items-start hover:shadow-[0_0_30px_rgba(173,198,255,0.06)] transition-all">
+        <div class="bg-primary/10 p-3 rounded-xl flex-shrink-0">
+          <span class="material-symbols-outlined text-primary text-3xl">inventory_2</span>
+        </div>
+        <div>
+          <h4 class="font-headline font-bold text-lg mb-2 text-white">Versioned Artifacts</h4>
+          <p class="text-on-surface-variant text-sm leading-relaxed">Every stage produces versioned artifacts stored in S3 — plans, reviews, implementation results, and test reports — providing a full audit trail for every run.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BUILT ON PROVEN FOUNDATIONS ─────────────────────────── -->
+  <section class="mb-28">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-1.5 h-10 bg-primary rounded-full"></div>
+      <h2 class="text-3xl md:text-4xl font-headline font-bold tracking-tight">Built on Proven Foundations</h2>
+    </div>
+    <p class="text-on-surface-variant mb-10 ml-6 max-w-3xl">OneShot doesn't start from scratch. Its guardrails, prompts, and domain knowledge are drawn from battle-tested agents that have been refined across hundreds of production tasks in the Specter platform.</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Left: Agent lineage -->
+      <div class="glass-card rounded-2xl p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">hub</span>
+          <h3 class="font-headline font-bold text-xl text-white">Inherited from the Specter Ecosystem</h3>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">OneShot's planning, review, and implementation stages incorporate proven patterns and guardrails from the broader Product Factory agent roster:</p>
+        <div class="space-y-4">
+          <div class="flex gap-4 items-start">
+            <span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-2.5 py-1.5 rounded-full flex-shrink-0 mt-0.5">PRISM</span>
+            <div class="text-on-surface-variant text-sm leading-relaxed">Implementation planning patterns, requirement refinement strategies, and spec-driven development workflows</div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <span class="bg-[#4edea3]/10 text-[#4edea3] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1.5 rounded-full flex-shrink-0 mt-0.5">MACH</span>
+            <div class="text-on-surface-variant text-sm leading-relaxed">Codebase analysis techniques, repository exploration patterns, and change impact assessment</div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <span class="bg-[#ffb95f]/10 text-[#ffb95f] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1.5 rounded-full flex-shrink-0 mt-0.5">QUEST</span>
+            <div class="text-on-surface-variant text-sm leading-relaxed">Quality assurance frameworks, test strategy generation, and acceptance criteria validation</div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-2.5 py-1.5 rounded-full flex-shrink-0 mt-0.5">DARCI</span>
+            <div class="text-on-surface-variant text-sm leading-relaxed">Root-cause analysis patterns and defect investigation techniques for error handling</div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <span class="bg-[#ffb95f]/10 text-[#ffb95f] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1.5 rounded-full flex-shrink-0 mt-0.5">SENTRY</span>
+            <div class="text-on-surface-variant text-sm leading-relaxed">SQL safety review guardrails and database change validation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Guardrails detail -->
+      <div class="space-y-5">
+        <!-- Externalized prompts card -->
+        <div class="glass-card rounded-2xl p-8">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="material-symbols-outlined text-[#4edea3] text-2xl">tune</span>
+            <h3 class="font-headline font-bold text-lg text-white">Externalized Prompt System</h3>
+          </div>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-4">Prompts and guardrails are stored as versioned assets in S3 — not hardcoded. This means they can be updated, A/B tested, and audited independently of code deployments.</p>
+          <ul class="space-y-2.5 text-on-surface-variant text-sm">
+            <li class="flex gap-2 items-start">
+              <span class="material-symbols-outlined text-primary text-base mt-0.5">check_circle</span>
+              <span>Manifest-pinned versioning — every run references an exact prompt version</span>
+            </li>
+            <li class="flex gap-2 items-start">
+              <span class="material-symbols-outlined text-primary text-base mt-0.5">check_circle</span>
+              <span>Separate prompt and guardrail layers — guardrails compose on top of base prompts</span>
+            </li>
+            <li class="flex gap-2 items-start">
+              <span class="material-symbols-outlined text-primary text-base mt-0.5">check_circle</span>
+              <span>TTL-cached with invalidation — fast reads, instant refresh on deploy</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Guardrails card -->
+        <div class="glass-card rounded-2xl p-8">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="material-symbols-outlined text-[#ffb95f] text-2xl">shield</span>
+            <h3 class="font-headline font-bold text-lg text-white">Built-In Guardrails</h3>
+          </div>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-4">Every stage of the pipeline enforces domain-specific guardrails:</p>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+              <div class="text-white text-xs font-semibold mb-1">Security</div>
+              <div class="text-on-surface-variant text-[11px] leading-relaxed">No hardcoded secrets, SQL injection, command injection, or XSS</div>
+            </div>
+            <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+              <div class="text-white text-xs font-semibold mb-1">Healthcare / HIPAA</div>
+              <div class="text-on-surface-variant text-[11px] leading-relaxed">PHI handling follows existing codebase patterns and compliance rules</div>
+            </div>
+            <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+              <div class="text-white text-xs font-semibold mb-1">Code Quality</div>
+              <div class="text-on-surface-variant text-[11px] leading-relaxed">Enforces naming conventions, file structure, and error handling patterns</div>
+            </div>
+            <div class="bg-white/3 rounded-xl p-3 border border-white/5">
+              <div class="text-white text-xs font-semibold mb-1">TDD-Aware</div>
+              <div class="text-on-surface-variant text-[11px] leading-relaxed">Tests planned and written before production code for every change</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PREVIEW DEPLOYMENTS ──────────────────────────────────── -->
+  <section class="mb-28">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-1.5 h-10 bg-primary rounded-full"></div>
+      <h2 class="text-3xl md:text-4xl font-headline font-bold tracking-tight">Preview Deployments</h2>
+    </div>
+    <p class="text-on-surface-variant mb-10 ml-6 max-w-3xl">Once a draft PR is created, stakeholders can preview the changes in a live environment before merging — no local setup required.</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Left: How it works -->
+      <div class="glass-card rounded-2xl p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <span class="material-symbols-outlined text-[#4edea3] text-2xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+          <h3 class="font-headline font-bold text-xl text-white">How Preview Deploy Works</h3>
+        </div>
+        <div class="space-y-5">
+          <div class="flex gap-4 items-start">
+            <div class="w-8 h-8 rounded-full bg-[#4edea3]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="font-headline font-bold text-sm text-[#4edea3]">1</span>
+            </div>
+            <div>
+              <div class="text-white font-semibold text-sm mb-1">PR Completes</div>
+              <div class="text-on-surface-variant text-sm leading-relaxed">OneShot finishes the pipeline and opens a draft PR on GitHub. The run enters the <code class="bg-white/5 px-1.5 py-0.5 rounded text-primary text-xs">pr_open</code> state.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="w-8 h-8 rounded-full bg-[#4edea3]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="font-headline font-bold text-sm text-[#4edea3]">2</span>
+            </div>
+            <div>
+              <div class="text-white font-semibold text-sm mb-1">One-Click Deploy</div>
+              <div class="text-on-surface-variant text-sm leading-relaxed">From the OneShot dashboard, click the deploy button on any eligible run. The request triggers a GitHub Actions workflow to build and push the container image.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="w-8 h-8 rounded-full bg-[#4edea3]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="font-headline font-bold text-sm text-[#4edea3]">3</span>
+            </div>
+            <div>
+              <div class="text-white font-semibold text-sm mb-1">ECS Deployment</div>
+              <div class="text-on-surface-variant text-sm leading-relaxed">The built image is deployed to a dedicated ECS preview slot. The preview URL becomes available once the service is healthy.</div>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start">
+            <div class="w-8 h-8 rounded-full bg-[#4edea3]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="font-headline font-bold text-sm text-[#4edea3]">4</span>
+            </div>
+            <div>
+              <div class="text-white font-semibold text-sm mb-1">Stakeholder Review</div>
+              <div class="text-on-surface-variant text-sm leading-relaxed">Stakeholders access the preview URL to validate changes in a real environment. No git knowledge or local setup needed.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Status & details -->
+      <div class="space-y-5">
+        <!-- Status indicator card -->
+        <div class="glass-card rounded-2xl p-8">
+          <h3 class="font-headline font-bold text-lg text-white mb-5">Deployment Status Tracking</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-6">Every deployment is tracked with a traffic-light indicator on the dashboard, so teams always know the current state at a glance.</p>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-3 h-3 rounded-full bg-[#4edea3] shadow-[0_0_8px_rgba(78,222,163,0.5)]"></div>
+              <span class="text-white text-sm font-medium">Green</span>
+              <span class="text-on-surface-variant text-sm">— Preview is live and accessible</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-3 h-3 rounded-full bg-[#ffb95f] shadow-[0_0_8px_rgba(255,185,95,0.5)]"></div>
+              <span class="text-white text-sm font-medium">Amber</span>
+              <span class="text-on-surface-variant text-sm">— Build or deployment in progress</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-3 h-3 rounded-full bg-[#fa746f] shadow-[0_0_8px_rgba(250,116,111,0.5)]"></div>
+              <span class="text-white text-sm font-medium">Red</span>
+              <span class="text-on-surface-variant text-sm">— Deployment failed</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-3 h-3 rounded-full bg-white/20"></div>
+              <span class="text-white text-sm font-medium">Grey</span>
+              <span class="text-on-surface-variant text-sm">— Not yet deployed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slot management card -->
+        <div class="glass-card rounded-2xl p-8">
+          <h3 class="font-headline font-bold text-lg text-white mb-4">Slot Management</h3>
+          <p class="text-on-surface-variant text-sm leading-relaxed mb-4">Preview environments use a managed slot system to control infrastructure costs and avoid conflicts:</p>
+          <ul class="space-y-3 text-on-surface-variant text-sm">
+            <li class="flex gap-2 items-start">
+              <span class="material-symbols-outlined text-primary text-base mt-0.5">check_circle</span>
+              <span>One active preview per slot — deploying a new run automatically supersedes the previous one</span>
+            </li>
+            <li class="flex gap-2 items-start">
+              <span class="material-symbols-outlined text-primary text-base mt-0.5">check_circle</span>
+              <span>Smooth handoff — old preview stays live until the replacement is fully healthy</span>
+            </li>
+            <li class="flex gap-2 items-start">
+              <span class="material-symbols-outlined text-primary text-base mt-0.5">check_circle</span>
+              <span>Only one in-flight deployment per slot — prevents conflicting simultaneous builds</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ───────────────────────────────────────────────── -->
+<footer class="w-full py-10 border-t border-white/5">
+  <div class="text-center">
+    <span class="font-headline font-bold text-sm uppercase tracking-widest text-white/20">Product Factory</span>
+  </div>
+</footer>
+
+</body>
+</html>
