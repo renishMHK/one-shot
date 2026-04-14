@@ -15,151 +15,128 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 56px;
   }
 
   /* Radial glows */
   .glow-center {
     position: absolute;
-    width: 1200px;
-    height: 440px;
-    background: radial-gradient(ellipse, rgba(173,198,255,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .glow-left {
-    position: absolute; left: 12%; width: 600px; height: 320px;
-    background: radial-gradient(ellipse, rgba(78,222,163,0.035) 0%, transparent 70%);
-  }
-  .glow-right {
-    position: absolute; right: 12%; width: 600px; height: 320px;
-    background: radial-gradient(ellipse, rgba(255,185,95,0.035) 0%, transparent 70%);
+    width: 1200px; height: 440px;
+    background: radial-gradient(ellipse, rgba(173,198,255,0.05) 0%, transparent 70%);
   }
 
   /* Grid overlay */
   body::before {
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background-image:
-      linear-gradient(rgba(173,198,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(173,198,255,0.02) 1px, transparent 1px);
+      linear-gradient(rgba(173,198,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(173,198,255,0.015) 1px, transparent 1px);
     background-size: 160px 160px;
     pointer-events: none;
   }
 
-  /* ── TARGET ── */
-  .target-container {
-    position: relative;
-    width: 200px;
-    height: 200px;
+  /* Layout container */
+  .layout {
+    display: flex;
+    align-items: center;
+    gap: 60px;
     z-index: 2;
-    flex-shrink: 0;
+    position: relative;
   }
 
+  /* ── BULLSEYE TARGET ── */
+  .target {
+    position: relative;
+    width: 220px; height: 220px;
+    flex-shrink: 0;
+  }
   .target-ring {
     position: absolute;
     border-radius: 50%;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
   }
-  .ring-outer {
-    width: 200px; height: 200px;
-    border: 4px solid rgba(173,198,255,0.25);
-    box-shadow: 0 0 20px rgba(173,198,255,0.08);
-  }
-  .ring-mid {
-    width: 140px; height: 140px;
-    border: 3px solid rgba(78,222,163,0.3);
-    box-shadow: 0 0 16px rgba(78,222,163,0.06);
-  }
-  .ring-inner {
-    width: 80px; height: 80px;
-    border: 3px solid rgba(255,185,95,0.35);
-    box-shadow: 0 0 12px rgba(255,185,95,0.08);
-  }
-  .ring-bullseye {
-    width: 24px; height: 24px;
-    background: radial-gradient(circle, #adc6ff 40%, rgba(173,198,255,0.3) 100%);
-    box-shadow: 0 0 16px rgba(173,198,255,0.5);
+  .t-r1 { width: 220px; height: 220px; background: rgba(173,198,255,0.15); }
+  .t-r2 { width: 180px; height: 180px; background: #09090B; }
+  .t-r3 { width: 150px; height: 150px; background: rgba(78,222,163,0.18); }
+  .t-r4 { width: 110px; height: 110px; background: #09090B; }
+  .t-r5 { width: 80px; height: 80px; background: rgba(255,185,95,0.2); }
+  .t-r6 { width: 40px; height: 40px; background: #09090B; }
+  .t-center {
+    width: 20px; height: 20px;
+    background: #adc6ff;
+    box-shadow: 0 0 20px rgba(173,198,255,0.6), 0 0 40px rgba(173,198,255,0.2);
   }
 
-  /* Ring pulse after impact */
-  @keyframes ring-pulse {
-    0%   { opacity: 1; }
-    50%  { opacity: 0.5; }
-    100% { opacity: 1; }
+  /* Impact glow on bullseye */
+  @keyframes impact-glow {
+    0%, 35% { box-shadow: 0 0 20px rgba(173,198,255,0.6), 0 0 40px rgba(173,198,255,0.2); }
+    45%     { box-shadow: 0 0 50px rgba(78,222,163,0.9), 0 0 100px rgba(173,198,255,0.5), 0 0 140px rgba(173,198,255,0.2); }
+    65%     { box-shadow: 0 0 20px rgba(173,198,255,0.6), 0 0 40px rgba(173,198,255,0.2); }
+    100%    { box-shadow: 0 0 20px rgba(173,198,255,0.6), 0 0 40px rgba(173,198,255,0.2); }
   }
-  .ring-outer { animation: ring-pulse 3s ease-in-out infinite; }
-  .ring-mid   { animation: ring-pulse 3s ease-in-out infinite 0.3s; }
-  .ring-inner { animation: ring-pulse 3s ease-in-out infinite 0.6s; }
+  .t-center { animation: impact-glow 5s ease-out infinite; }
 
-  /* Crosshair lines */
-  .crosshair {
+  /* Ring ripple on impact */
+  @keyframes ring-ripple {
+    0%, 35% { opacity: 1; }
+    45%     { opacity: 0.5; }
+    55%     { opacity: 1; }
+    100%    { opacity: 1; }
+  }
+  .t-r1 { animation: ring-ripple 5s ease-out infinite; }
+  .t-r3 { animation: ring-ripple 5s ease-out infinite 0.08s; }
+  .t-r5 { animation: ring-ripple 5s ease-out infinite 0.16s; }
+
+  /* Impact shockwave ring */
+  .shockwave {
     position: absolute;
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .crosshair-h, .crosshair-v {
-    position: absolute;
-    background: rgba(173,198,255,0.1);
-  }
-  .crosshair-h {
-    width: 220px; height: 1px;
-    top: 0; left: -110px;
-  }
-  .crosshair-v {
-    width: 1px; height: 220px;
-    top: -110px; left: 0;
-  }
-
-  /* ── DART ── */
-  .dart-wrapper {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  @keyframes dart-strike {
-    0%   { transform: translate(160px, -160px) rotate(-45deg) scale(1.2); opacity: 0; }
-    15%  { opacity: 1; }
-    40%  { transform: translate(0, 0) rotate(-45deg) scale(1); opacity: 1; }
-    45%  { transform: translate(0, 0) rotate(-45deg) scale(1); opacity: 1; }
-    100% { transform: translate(0, 0) rotate(-45deg) scale(1); opacity: 1; }
-  }
-
-  .dart {
-    animation: dart-strike 4s ease-out infinite;
-    transform-origin: center center;
-  }
-
-  /* Impact flash */
-  .impact-flash {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 60px; height: 60px;
+    width: 20px; height: 20px;
     border-radius: 50%;
+    border: 2px solid rgba(173,198,255,0.6);
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(173,198,255,0.6) 0%, transparent 70%);
     opacity: 0;
-    animation: impact-burst 4s ease-out infinite;
+    animation: shockwave-expand 5s ease-out infinite;
   }
-  @keyframes impact-burst {
-    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
-    38%  { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
-    42%  { opacity: 1; transform: translate(-50%, -50%) scale(1.8); }
-    60%  { opacity: 0; transform: translate(-50%, -50%) scale(2.5); }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.5); }
+  @keyframes shockwave-expand {
+    0%, 38% { width: 20px; height: 20px; opacity: 0; }
+    40%     { width: 20px; height: 20px; opacity: 0.8; }
+    70%     { width: 260px; height: 260px; opacity: 0; }
+    100%    { opacity: 0; }
   }
 
-  /* Bullseye glow on impact */
-  @keyframes bullseye-glow {
-    0%   { box-shadow: 0 0 16px rgba(173,198,255,0.5); }
-    38%  { box-shadow: 0 0 16px rgba(173,198,255,0.5); }
-    42%  { box-shadow: 0 0 40px rgba(78,222,163,0.9), 0 0 80px rgba(173,198,255,0.4); }
-    60%  { box-shadow: 0 0 16px rgba(173,198,255,0.5); }
-    100% { box-shadow: 0 0 16px rgba(173,198,255,0.5); }
+  /* ── ARROW ── */
+  .arrow-track {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 3200px;
+    height: 480px;
+    pointer-events: none;
+    z-index: 10;
   }
-  .ring-bullseye { animation: bullseye-glow 4s ease-out infinite; }
+
+  @keyframes arrow-fly {
+    0%   { transform: translateX(800px); opacity: 0; }
+    10%  { opacity: 1; }
+    40%  { transform: translateX(0px); opacity: 1; }
+    100% { transform: translateX(0px); opacity: 1; }
+  }
+
+  .arrow-group {
+    position: absolute;
+    /* Position so arrowhead lands on bullseye center */
+    top: 50%;
+    left: calc(50% - 330px);
+    transform: translateY(-50%);
+    animation: arrow-fly 5s ease-out infinite;
+  }
+
+  .arrow-svg {
+    display: block;
+  }
 
   /* ── TEXT ── */
   @keyframes text-shimmer {
@@ -168,9 +145,9 @@
   }
 
   .title-block {
-    z-index: 2;
     display: flex;
     flex-direction: column;
+    z-index: 5;
   }
 
   .title {
@@ -204,15 +181,15 @@
 
   /* Accent lines */
   .h-line {
-    position: absolute; top: 50%; height: 2px; opacity: 0.1;
+    position: absolute; top: 50%; height: 2px; opacity: 0.08; z-index: 1;
   }
   .h-line-left {
-    right: calc(50% + 380px); left: 8%;
-    background: linear-gradient(90deg, transparent, rgba(78,222,163,0.6), rgba(173,198,255,0.4));
+    left: 5%; right: calc(50% + 420px);
+    background: linear-gradient(90deg, transparent, rgba(78,222,163,0.5));
   }
   .h-line-right {
-    left: calc(50% + 380px); right: 8%;
-    background: linear-gradient(90deg, rgba(173,198,255,0.4), rgba(255,185,95,0.6), transparent);
+    left: calc(50% + 420px); right: 5%;
+    background: linear-gradient(90deg, rgba(255,185,95,0.5), transparent);
   }
 
   .deco-dot {
@@ -220,6 +197,7 @@
     width: 8px; height: 8px;
     border-radius: 50%;
     transform: translateY(-50%);
+    z-index: 1;
   }
   @keyframes dot-glow {
     0%, 100% { opacity: 0.15; box-shadow: none; }
@@ -230,44 +208,38 @@
 </head>
 <body>
   <div class="glow-center"></div>
-  <div class="glow-left"></div>
-  <div class="glow-right"></div>
   <div class="h-line h-line-left"></div>
   <div class="h-line h-line-right"></div>
-  <div class="deco-dot" style="left:14%; color:#4edea3; animation-delay:0s;"></div>
-  <div class="deco-dot" style="left:24%; color:#adc6ff; animation-delay:0.7s;"></div>
-  <div class="deco-dot" style="left:34%; color:#adc6ff; animation-delay:1.4s;"></div>
-  <div class="deco-dot" style="right:14%; color:#ffb95f; animation-delay:0.3s;"></div>
-  <div class="deco-dot" style="right:24%; color:#ffb95f; animation-delay:1.0s;"></div>
-  <div class="deco-dot" style="right:34%; color:#4edea3; animation-delay:1.7s;"></div>
+  <div class="deco-dot" style="left:6%; color:#4edea3; animation-delay:0s;"></div>
+  <div class="deco-dot" style="left:14%; color:#adc6ff; animation-delay:0.7s;"></div>
+  <div class="deco-dot" style="right:6%; color:#ffb95f; animation-delay:0.3s;"></div>
+  <div class="deco-dot" style="right:14%; color:#4edea3; animation-delay:1.0s;"></div>
 
-  <!-- Target -->
-  <div class="target-container">
-    <div class="crosshair">
-      <div class="crosshair-h"></div>
-      <div class="crosshair-v"></div>
-    </div>
-    <div class="target-ring ring-outer"></div>
-    <div class="target-ring ring-mid"></div>
-    <div class="target-ring ring-inner"></div>
-    <div class="target-ring ring-bullseye"></div>
-
-    <!-- Impact flash -->
-    <div class="impact-flash"></div>
-
-    <!-- Dart SVG -->
-    <div class="dart-wrapper">
-      <svg class="dart" width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Dart shaft -->
-        <line x1="60" y1="60" x2="110" y2="10" stroke="#adc6ff" stroke-width="4" stroke-linecap="round"/>
-        <!-- Dart fins -->
-        <path d="M95 10 L110 10 L110 25" stroke="#4edea3" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M100 5 L115 5 L115 20" stroke="rgba(78,222,163,0.4)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- Dart tip -->
-        <circle cx="60" cy="60" r="4" fill="#ffb95f" filter="url(#tipGlow)"/>
+  <!-- Arrow flying from right to bullseye -->
+  <div class="arrow-track">
+    <div class="arrow-group">
+      <svg class="arrow-svg" width="700" height="60" viewBox="0 0 700 60" fill="none">
+        <!-- Arrow shaft -->
+        <line x1="40" y1="30" x2="680" y2="30" stroke="url(#shaftGrad)" stroke-width="5" stroke-linecap="round"/>
+        <!-- Arrowhead -->
+        <polygon points="0,30 50,14 50,46" fill="#adc6ff" filter="url(#headGlow)"/>
+        <!-- Fletching (feathers) at tail -->
+        <path d="M670,30 L700,10 L690,30 L700,50 Z" fill="rgba(78,222,163,0.7)"/>
+        <path d="M655,30 L680,15 L672,30 L680,45 Z" fill="rgba(78,222,163,0.4)"/>
+        <!-- Trail glow -->
+        <line x1="50" y1="30" x2="500" y2="30" stroke="url(#trailGrad)" stroke-width="2" opacity="0.5"/>
         <defs>
-          <filter id="tipGlow" x="50" y="50" width="20" height="20">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
+          <linearGradient id="shaftGrad" x1="0" y1="0" x2="700" y2="0">
+            <stop offset="0%" stop-color="#adc6ff"/>
+            <stop offset="50%" stop-color="#7aa3ff"/>
+            <stop offset="100%" stop-color="#4edea3"/>
+          </linearGradient>
+          <linearGradient id="trailGrad" x1="50" y1="0" x2="500" y2="0">
+            <stop offset="0%" stop-color="rgba(173,198,255,0.4)"/>
+            <stop offset="100%" stop-color="rgba(173,198,255,0)"/>
+          </linearGradient>
+          <filter id="headGlow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
         </defs>
@@ -275,10 +247,24 @@
     </div>
   </div>
 
-  <!-- Title + subtitle -->
-  <div class="title-block">
-    <div class="title">OneShot</div>
-    <div class="subtitle">Autonomous Feature Delivery Pipeline</div>
+  <div class="layout">
+    <!-- Bullseye -->
+    <div class="target">
+      <div class="target-ring t-r1"></div>
+      <div class="target-ring t-r2"></div>
+      <div class="target-ring t-r3"></div>
+      <div class="target-ring t-r4"></div>
+      <div class="target-ring t-r5"></div>
+      <div class="target-ring t-r6"></div>
+      <div class="target-ring t-center"></div>
+      <div class="shockwave"></div>
+    </div>
+
+    <!-- Title -->
+    <div class="title-block">
+      <div class="title">OneShot</div>
+      <div class="subtitle">Autonomous Feature Delivery Pipeline</div>
+    </div>
   </div>
 </body>
 </html>
