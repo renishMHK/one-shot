@@ -675,12 +675,13 @@ tailwind.config = {
 
 <script>
 // ── Scroll-reveal with IntersectionObserver ──
-// ── Scroll-reveal: one-way — reveal once, stay visible ──
+// ── Scroll-reveal: bidirectional — fade in on enter, fade out on exit ──
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
+    } else {
+      entry.target.classList.remove('visible');
     }
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
@@ -703,6 +704,8 @@ const countObserver = new IntersectionObserver((entries) => {
         if (progress < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
+    } else {
+      el.textContent = '0';
     }
   });
 }, { threshold: 0.5 });
