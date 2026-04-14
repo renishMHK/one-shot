@@ -707,20 +707,19 @@ tailwind.config = {
 
 <script>
 // ── Scroll-reveal with IntersectionObserver ──
-// ── Scroll-reveal: bidirectional — fades in on enter, fades out on exit ──
+// ── Scroll-reveal: one-way — reveal once, stay visible ──
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-    } else {
-      entry.target.classList.remove('visible');
+      revealObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-// ── Count-up animation for stat numbers (re-triggers on each scroll-in) ──
+// ── Count-up animation for stat numbers (re-triggers on scroll back) ──
 const countObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     const el = entry.target;
@@ -736,8 +735,6 @@ const countObserver = new IntersectionObserver((entries) => {
         if (progress < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-    } else {
-      el.textContent = '0';
     }
   });
 }, { threshold: 0.5 });
