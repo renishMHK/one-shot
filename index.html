@@ -707,22 +707,24 @@ tailwind.config = {
 
 <script>
 // ── Scroll-reveal with IntersectionObserver ──
+// ── Scroll-reveal: bidirectional — fades in on enter, fades out on exit ──
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
+    } else {
+      entry.target.classList.remove('visible');
     }
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-// ── Count-up animation for stat numbers ──
+// ── Count-up animation for stat numbers (re-triggers on each scroll-in) ──
 const countObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
+    const el = entry.target;
     if (entry.isIntersecting) {
-      const el = entry.target;
       const target = parseInt(el.dataset.target, 10);
       const duration = 1200;
       const start = performance.now();
@@ -734,7 +736,8 @@ const countObserver = new IntersectionObserver((entries) => {
         if (progress < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-      countObserver.unobserve(el);
+    } else {
+      el.textContent = '0';
     }
   });
 }, { threshold: 0.5 });
