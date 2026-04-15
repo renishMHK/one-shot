@@ -107,6 +107,9 @@ tailwind.config = {
   .chevron-5 { animation-delay: 2.75s; }
 
   .stage-6 { --glow-color: rgba(78,222,163,0.3); animation-delay: 3.0s; }
+  .chevron-6 { animation-delay: 3.25s; }
+
+  .stage-7 { --glow-color: rgba(173,198,255,0.3); animation-delay: 3.5s; }
 
   /* ── Scroll-reveal ─────────────────────────── */
   .reveal {
@@ -202,68 +205,92 @@ tailwind.config = {
       <div class="w-1.5 h-10 bg-primary rounded-full"></div>
       <h2 class="text-3xl md:text-4xl font-headline font-bold tracking-tight">The Pipeline</h2>
     </div>
-    <div class="flex flex-wrap justify-center items-start gap-3 md:gap-2">
+    <div class="flex flex-wrap justify-center items-start gap-1">
       <!-- Qualify -->
-      <div class="flex flex-col items-center w-28 md:w-32 text-center">
-        <div class="stage-icon stage-0 w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-3">
-          <span class="material-symbols-outlined text-primary text-2xl">verified</span>
+      <div class="flex flex-col items-center w-24 text-center">
+        <div class="stage-icon stage-0 w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-2">
+          <span class="material-symbols-outlined text-primary text-xl">verified</span>
         </div>
-        <div class="font-headline font-bold text-sm text-white mb-1">Qualify</div>
-        <div class="text-on-surface-variant text-[11px] leading-tight">Evaluates ticket scope and feasibility</div>
+        <div class="font-headline font-bold text-xs text-white mb-0.5">Qualify</div>
+        <div class="text-on-surface-variant text-[10px] leading-tight">Evaluates scope and feasibility</div>
       </div>
-      <span class="material-symbols-outlined stage-chevron chevron-0 text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <span class="material-symbols-outlined stage-chevron chevron-0 text-outline-variant text-sm mt-4 flex-shrink-0">chevron_right</span>
       <!-- Plan -->
-      <div class="flex flex-col items-center w-28 md:w-32 text-center">
-        <div class="stage-icon stage-1 w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-3">
-          <span class="material-symbols-outlined text-primary text-2xl">architecture</span>
+      <div class="flex flex-col items-center w-24 text-center">
+        <div class="stage-icon stage-1 w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-2">
+          <span class="material-symbols-outlined text-primary text-xl">architecture</span>
         </div>
-        <div class="font-headline font-bold text-sm text-white mb-1">Plan</div>
-        <div class="text-on-surface-variant text-[11px] leading-tight">Generates implementation plan from context</div>
+        <div class="font-headline font-bold text-xs text-white mb-0.5">Plan</div>
+        <div class="text-on-surface-variant text-[10px] leading-tight">Generates implementation plan</div>
       </div>
-      <span class="material-symbols-outlined stage-chevron chevron-1 text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <span class="material-symbols-outlined stage-chevron chevron-1 text-outline-variant text-sm mt-4 flex-shrink-0">chevron_right</span>
       <!-- Review -->
-      <div class="flex flex-col items-center w-28 md:w-32 text-center">
-        <div class="stage-icon stage-2 w-14 h-14 rounded-2xl bg-[#ffb95f]/10 flex items-center justify-center mb-3">
-          <span class="material-symbols-outlined text-[#ffb95f] text-2xl">rate_review</span>
+      <div class="flex flex-col items-center w-24 text-center">
+        <div class="stage-icon stage-2 w-12 h-12 rounded-2xl bg-[#ffb95f]/10 flex items-center justify-center mb-2">
+          <span class="material-symbols-outlined text-[#ffb95f] text-xl">rate_review</span>
         </div>
-        <div class="font-headline font-bold text-sm text-white mb-1">Review</div>
-        <div class="text-on-surface-variant text-[11px] leading-tight">Cross-model review validates plan quality</div>
+        <div class="font-headline font-bold text-xs text-white mb-0.5">Review</div>
+        <div class="text-on-surface-variant text-[10px] leading-tight">Cross-model plan review</div>
       </div>
-      <span class="material-symbols-outlined stage-chevron chevron-2 text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <span class="material-symbols-outlined stage-chevron chevron-2 text-outline-variant text-sm mt-4 flex-shrink-0">chevron_right</span>
       <!-- Implement -->
-      <div class="flex flex-col items-center w-28 md:w-32 text-center">
-        <div class="stage-icon stage-3 w-14 h-14 rounded-2xl bg-[#4edea3]/10 flex items-center justify-center mb-3">
-          <span class="material-symbols-outlined text-[#4edea3] text-2xl">code</span>
+      <div class="flex flex-col items-center w-24 text-center">
+        <div class="stage-icon stage-3 w-12 h-12 rounded-2xl bg-[#4edea3]/10 flex items-center justify-center mb-2">
+          <span class="material-symbols-outlined text-[#4edea3] text-xl">code</span>
         </div>
-        <div class="font-headline font-bold text-sm text-white mb-1">Implement</div>
-        <div class="text-on-surface-variant text-[11px] leading-tight">Writes production code on a dedicated branch</div>
+        <div class="font-headline font-bold text-xs text-white mb-0.5">Implement</div>
+        <div class="text-on-surface-variant text-[10px] leading-tight">Writes code on dedicated branch</div>
       </div>
-      <span class="material-symbols-outlined stage-chevron chevron-3 text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <span class="material-symbols-outlined stage-chevron chevron-3 text-outline-variant text-sm mt-4 flex-shrink-0">chevron_right</span>
       <!-- Code Review -->
-      <div class="flex flex-col items-center w-28 md:w-32 text-center">
-        <div class="stage-icon stage-4 w-14 h-14 rounded-2xl bg-[#ffb95f]/10 flex items-center justify-center mb-3">
-          <span class="material-symbols-outlined text-[#ffb95f] text-2xl">policy</span>
+      <div class="flex flex-col items-center w-24 text-center">
+        <div class="stage-icon stage-4 w-12 h-12 rounded-2xl bg-[#ffb95f]/10 flex items-center justify-center mb-2">
+          <span class="material-symbols-outlined text-[#ffb95f] text-xl">policy</span>
         </div>
-        <div class="font-headline font-bold text-sm text-white mb-1">Code Review</div>
-        <div class="text-on-surface-variant text-[11px] leading-tight">Reviews code for bugs and standards</div>
+        <div class="font-headline font-bold text-xs text-white mb-0.5">Code Review</div>
+        <div class="text-on-surface-variant text-[10px] leading-tight">Reviews code against plan</div>
       </div>
-      <span class="material-symbols-outlined stage-chevron chevron-4 text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
+      <span class="material-symbols-outlined stage-chevron chevron-4 text-outline-variant text-sm mt-4 flex-shrink-0">chevron_right</span>
       <!-- Test -->
-      <div class="flex flex-col items-center w-28 md:w-32 text-center">
-        <div class="stage-icon stage-5 w-14 h-14 rounded-2xl bg-[#4edea3]/10 flex items-center justify-center mb-3">
-          <span class="material-symbols-outlined text-[#4edea3] text-2xl">science</span>
+      <div class="flex flex-col items-center w-24 text-center">
+        <div class="stage-icon stage-5 w-12 h-12 rounded-2xl bg-[#4edea3]/10 flex items-center justify-center mb-2">
+          <span class="material-symbols-outlined text-[#4edea3] text-xl">science</span>
         </div>
-        <div class="font-headline font-bold text-sm text-white mb-1">Test</div>
-        <div class="text-on-surface-variant text-[11px] leading-tight">Runs automated test suites</div>
+        <div class="font-headline font-bold text-xs text-white mb-0.5">Test</div>
+        <div class="text-on-surface-variant text-[10px] leading-tight">Runs automated test suites</div>
       </div>
-      <span class="material-symbols-outlined stage-chevron chevron-5 text-outline-variant text-lg mt-5 hidden md:block">chevron_right</span>
-      <!-- PR -->
-      <div class="flex flex-col items-center w-28 md:w-32 text-center">
-        <div class="stage-icon stage-6 w-14 h-14 rounded-2xl bg-[#4edea3]/10 flex items-center justify-center mb-3">
-          <span class="material-symbols-outlined text-[#4edea3] text-2xl">merge_type</span>
+      <!-- Outcome separator: double chevron -->
+      <div class="flex items-center mt-4 flex-shrink-0">
+        <span class="material-symbols-outlined stage-chevron chevron-5 text-outline-variant text-sm">chevron_right</span>
+        <span class="material-symbols-outlined stage-chevron chevron-5 text-outline-variant text-sm -ml-2.5">chevron_right</span>
+      </div>
+      <!-- Outcome: Draft PR -->
+      <div class="flex flex-col items-center w-24 text-center">
+        <div class="stage-icon stage-6 w-12 h-12 rounded-full border-2 border-dashed border-[#4edea3]/50 bg-[#4edea3]/5 flex items-center justify-center mb-2">
+          <span class="material-symbols-outlined text-[#4edea3] text-xl">merge_type</span>
         </div>
-        <div class="font-headline font-bold text-sm text-white mb-1">PR</div>
-        <div class="text-on-surface-variant text-[11px] leading-tight">Opens draft PR, posts results to JIRA</div>
+        <div class="font-headline font-bold text-xs text-[#4edea3] mb-0.5">Draft PR</div>
+        <div class="text-on-surface-variant text-[10px] leading-tight">Opens PR, posts to JIRA</div>
+      </div>
+      <span class="material-symbols-outlined stage-chevron chevron-6 text-outline-variant/40 text-sm mt-4 flex-shrink-0">arrow_forward</span>
+      <!-- Outcome: Live Preview -->
+      <div class="flex flex-col items-center w-24 text-center">
+        <div class="stage-icon stage-7 w-12 h-12 rounded-full border-2 border-dashed border-primary/50 bg-primary/5 flex items-center justify-center mb-2">
+          <span class="material-symbols-outlined text-primary text-xl">rocket_launch</span>
+        </div>
+        <div class="font-headline font-bold text-xs text-primary mb-0.5">Live Preview</div>
+        <div class="text-on-surface-variant text-[10px] leading-tight">Deploy to preview env</div>
+      </div>
+    </div>
+    <!-- Legend -->
+    <div class="flex justify-center gap-8 mt-6 text-[10px] text-on-surface-variant">
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 rounded-md bg-primary/10 border border-white/5"></div>
+        <span>Automated Stage</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-4 h-4 rounded-full border-[1.5px] border-dashed border-[#4edea3]/50 bg-[#4edea3]/5"></div>
+        <span>Outcome</span>
       </div>
     </div>
   </section>
@@ -316,7 +343,7 @@ tailwind.config = {
         <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-headline font-bold text-xl z-10">4</div>
         <div class="glass-card p-8 rounded-2xl w-full">
           <h3 class="text-xl font-headline font-bold mb-2 text-primary">Human Review</h3>
-          <p class="text-on-surface-variant leading-relaxed">A draft pull request is delivered to GitHub. The pipeline summary, PR link, and completion status are posted back to the original JIRA ticket. A human reviewer takes it from here — <span class="text-white font-semibold">OneShot never merges code automatically</span>.</p>
+          <p class="text-on-surface-variant leading-relaxed">A draft pull request is delivered to GitHub and a <span class="text-primary font-semibold">live preview environment</span> can be deployed with one click from the dashboard. The pipeline summary, PR link, and completion status are posted back to the original JIRA ticket. A human reviewer takes it from here — <span class="text-white font-semibold">OneShot never merges code automatically</span>.</p>
         </div>
       </div>
     </div>
